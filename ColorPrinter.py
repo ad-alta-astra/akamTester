@@ -8,6 +8,7 @@
 import ctypes, subprocess, platform, os
 from termcolor import cprint
 from datetime import datetime
+from security import safe_command
 
 
 def color_print(msg, status=0):
@@ -15,7 +16,7 @@ def color_print(msg, status=0):
     green = False
 
     def succeed_or_failed_print():
-        check_tty = subprocess.Popen('tty', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        check_tty = safe_command.run(subprocess.Popen, 'tty', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         check_tty_return_str = check_tty.stdout.read().decode("utf-8")[0:-1]
         if 'Windows' in platform.system() and check_tty_return_str in ('/dev/cons0', ''):
             clr = Color()
